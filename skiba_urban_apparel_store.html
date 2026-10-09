@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKIBA Urban Apparel - Graphic Tees Store</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        neon: {
+                            cyan: '#00f3ff',
+                            purple: '#a855f7',
+                            pink: '#ec4899',
+                            yellow: '#facc15'
+                        },
+                        dark: {
+                            bg: '#0a0a0c',
+                            card: '#121218',
+                            border: '#272732'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0c;
+            color: #e2e8f0;
+        }
+
+        .glow-hover {
+            transition: all 0.3s ease;
+        }
+        .glow-hover:hover {
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.25);
+            border-color: rgba(0, 243, 255, 0.5);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0c;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #272732;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a855f7;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-dark-bg text-gray-100 antialiased selection:bg-neon-cyan selection:text-black">
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-40 w-full border-b border-dark-border bg-dark-bg/80 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Brand Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-neon-purple to-neon-cyan flex items-center justify-center font-black text-2xl text-black shadow-lg shadow-neon-purple/20">
+                        S
+                    </div>
+                    <span class="text-2xl font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-neon-cyan">
+                        SKIBA<span class="text-neon-cyan text-sm ml-1 font-mono uppercase tracking-widest">Apparel</span>
+                    </span>
+                </div>
+
+                <!-- Search Input (Desktop) -->
+                <div class="hidden md:flex flex-1 max-w-md mx-8 relative">
+                    <input 
+                        type="text" 
+                        id="searchInput"
+                        oninput="handleSearch()"
+                        placeholder="Search cyber, neon, street designs..." 
+                        class="w-full bg-dark-card border border-dark-border rounded-full py-2.5 pl-11 pr-4 text-sm focus:outline-none focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan transition-all text-white placeholder-gray-500"
+                    >
+                    <i data-lucide="search" class="w-4 h-4 absolute left-4 top-3.5 text-gray-400"></i>
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="flex items-center gap-4">
+                    <!-- Category Filter Dropdown -->
+                    <select id="categoryFilter" onchange="handleFilter()" class="bg-dark-card border border-dark-border text-xs sm:text-sm text-gray-300 rounded-xl px-3 py-2 focus:outline-none focus:border-neon-cyan">
+                        <option value="all">All Styles</option>
+                        <option value="cyber">Cyber / Tech</option>
+                        <option value="gaming">Gaming</option>
+                        <option value="retro">Retro Pop</option>
+                        <option value="audio">Audio / Music</option>
+                    </select>
+
+                    <!-- Cart Trigger Button -->
+                    <button 
+                        onclick="toggleCart(true)"
+                        class="relative p-2.5 rounded-xl border border-dark-border bg-dark-card hover:border-neon-cyan transition-all flex items-center justify-center group"
+                        aria-label="View Shopping Cart"
+                    >
+                        <i data-lucide="shopping-bag" class="w-5 h-5 text-gray-300 group-hover:text-neon-cyan transition-colors"></i>
+                        <span id="cartCountBadge" class="absolute -top-1.5 -right-1.5 bg-gradient-to-r from-neon-pink to-neon-purple text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md">
+                            0
+                        </span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Search Bar -->
+            <div class="pb-4 md:hidden">
+                <div class="relative w-full">
+                    <input 
+                        type="text" 
+                        id="mobileSearchInput"
+                        oninput="handleMobileSearch()"
+                        placeholder="Search collection..." 
+                        class="w-full bg-dark-card border border-dark-border rounded-full py-2 pl-10 pr-4 text-sm focus:outline-none focus:border-neon-cyan text-white placeholder-gray-500"
+                    >
+                    <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3 text-gray-400"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="relative overflow-hidden border-b border-dark-border bg-gradient-to-b from-dark-card/50 to-transparent py-12 sm:py-16">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.12),transparent_50%)]"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-neon-cyan/10 text-neon-cyan border border-neon-cyan/20 mb-4">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Premium Streetwear Collection
+            </span>
+            <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-white mb-4">
+                VIBRANT GRAPHIC TEES
+            </h1>
+            <p class="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto mb-6">
+                Bold pop art, cyber aesthetic, and retro visuals printed on premium heavyweight 100% cotton black t-shirts. 
+            </p>
+            <div class="inline-flex items-center gap-3 bg-dark-card border border-neon-cyan/40 px-6 py-2.5 rounded-2xl shadow-xl">
+                <span class="text-xs uppercase tracking-widest text-gray-400">Flat Rate Price</span>
+                <span class="text-2xl font-black text-neon-cyan font-mono">R250 <span class="text-xs font-normal text-gray-400">each</span></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Catalog -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <!-- Section Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            <div>
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i data-lucide="grid" class="w-5 h-5 text-neon-cyan"></i> Feature Collection
+                </h2>
+                <p id="productCountText" class="text-xs text-gray-400 mt-0.5">Showing 6 exclusive designs</p>
+            </div>
+            <div class="flex items-center gap-2 text-xs text-gray-400 bg-dark-card/60 p-2 rounded-xl border border-dark-border self-start">
+                <i data-lucide="truck" class="w-4 h-4 text-neon-yellow"></i>
+                <span>Fast Nationwide Delivery Across South Africa</span>
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <!-- Dynamic Product Cards Injected via JS -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-20 bg-dark-card/40 rounded-3xl border border-dark-border">
+            <i data-lucide="search-x" class="w-12 h-12 text-gray-500 mx-auto mb-3"></i>
+            <h3 class="text-lg font-semibold text-white">No tees found matching your search</h3>
+            <p class="text-sm text-gray-400 mt-1">Try searching for alternative keywords or reset your filter.</p>
+            <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-neon-cyan/10 text-neon-cyan border border-neon-cyan/30 rounded-xl text-xs font-semibold hover:bg-neon-cyan/20 transition-all">
+                Reset Filters
+            </button>
+        </div>
+    </main>
+
+    <!-- Quick View Modal -->
+    <div id="quickViewModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity">
+        <div class="bg-dark-card border border-dark-border rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl relative flex flex-col md:flex-row">
+            <!-- Close Button -->
+            <button onclick="closeQuickView()" class="absolute top-4 right-4 z-10 p-2 rounded-full bg-dark-bg/80 text-gray-400 hover:text-white hover:bg-dark-bg transition-all">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Product Image Preview -->
+            <div class="w-full md:w-1/2 bg-black/40 p-6 flex items-center justify-center border-b md:border-b-0 md:border-r border-dark-border">
+                <img id="qvImage" src="" alt="Product" class="max-h-80 md:max-h-[380px] object-contain rounded-xl hover:scale-105 transition-transform duration-300">
+            </div>
+
+            <!-- Product Details -->
+            <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between">
+                <div>
+                    <span id="qvTag" class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-neon-purple/20 text-neon-purple border border-neon-purple/30 uppercase tracking-wider">
+                        Graphic Tee
+                    </span>
+                    <h3 id="qvTitle" class="text-2xl font-black text-white mt-3"></h3>
+                    <div class="text-2xl font-bold font-mono text-neon-cyan mt-2" id="qvPrice">R250</div>
+                    <p id="qvDescription" class="text-xs text-gray-400 mt-3 leading-relaxed"></p>
+
+                    <!-- Size Selector -->
+                    <div class="mt-6">
+                        <label class="text-xs font-semibold text-gray-300 block mb-2">Select Size</label>
+                        <div class="flex flex-wrap gap-2" id="qvSizes">
+                            <!-- Size options dynamically created -->
+                        </div>
+                    </div>
+
+                    <!-- Quantity -->
+                    <div class="mt-5">
+                        <label class="text-xs font-semibold text-gray-300 block mb-2">Quantity</label>
+                        <div class="flex items-center border border-dark-border rounded-xl w-32 bg-dark-bg">
+                            <button onclick="adjustQvQty(-1)" class="w-10 h-9 flex items-center justify-center text-gray-400 hover:text-white transition-colors">-</button>
+                            <span id="qvQty" class="flex-1 text-center font-bold text-sm text-white">1</span>
+                            <button onclick="adjustQvQty(1)" class="w-10 h-9 flex items-center justify-center text-gray-400 hover:text-white transition-colors">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <button id="qvAddToCartBtn" onclick="addFromQuickView()" class="w-full py-3 px-6 rounded-2xl bg-gradient-to-r from-neon-cyan to-neon-purple text-black font-bold text-sm shadow-lg hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                        <i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart • R250
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shopping Cart Sidebar Drawer -->
+    <div id="cartDrawer" class="fixed inset-0 z-50 pointer-events-none transition-opacity duration-300 opacity-0">
+        <!-- Backdrop -->
+        <div id="cartBackdrop" onclick="toggleCart(false)" class="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity"></div>
+        
+        <!-- Drawer Container -->
+        <div class="absolute inset-y-0 right-0 max-w-md w-full bg-dark-card border-l border-dark-border shadow-2xl pointer-events-auto flex flex-col justify-between transform transition-transform duration-300 translate-x-full" id="cartContent">
+            <!-- Cart Header -->
+            <div class="p-6 border-b border-dark-border flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="shopping-bag" class="w-6 h-6 text-neon-cyan"></i>
+                    <h2 class="text-lg font-bold text-white">Your Cart</h2>
+                    <span id="cartDrawerBadge" class="bg-dark-border text-xs px-2.5 py-0.5 rounded-full text-gray-300 font-mono">0</span>
+                </div>
+                <button onclick="toggleCart(false)" class="p-2 rounded-xl text-gray-400 hover:text-white hover:bg-dark-bg transition-all">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Cart Items List -->
+            <div id="cartItemsList" class="flex-1 overflow-y-auto p-6 space-y-4">
+                <!-- Cart items dynamically rendered -->
+            </div>
+
+            <!-- Cart Footer / Summary -->
+            <div class="p-6 border-t border-dark-border bg-dark-bg/60">
+                <div class="space-y-2 mb-4 text-sm">
+                    <div class="flex justify-between text-gray-400">
+                        <span>Subtotal</span>
+                        <span id="cartSubtotal" class="font-mono text-white">R0</span>
+                    </div>
+                    <div class="flex justify-between text-gray-400">
+                        <span>Standard Delivery (RSA)</span>
+                        <span id="cartShipping" class="font-mono text-neon-cyan">R60</span>
+                    </div>
+                    <div class="border-t border-dark-border pt-2 flex justify-between text-base font-bold text-white">
+                        <span>Total Price</span>
+                        <span id="cartTotal" class="font-mono text-neon-cyan text-lg">R0</span>
+                    </div>
+                </div>
+
+                <button onclick="simulateCheckout()" id="checkoutBtn" class="w-full py-3.5 bg-gradient-to-r from-neon-purple to-neon-pink text-white font-bold rounded-2xl shadow-lg hover:brightness-110 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i data-lucide="credit-card" class="w-4 h-4"></i> Proceed to Checkout
+                </button>
+                <p class="text-[10px] text-center text-gray-500 mt-2">Secure payment processed in ZAR (R)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Footer -->
+    <footer class="border-t border-dark-border bg-dark-bg mt-auto py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-gray-500">
+            <p class="font-mono text-gray-400 mb-2">SKIBA APPAREL © 2026. ALL RIGHTS RESERVED.</p>
+            <p>High-definition graphic prints on premium cotton apparel • Flat rate R250 per tee.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Store Product Database
+        const products = [
+            {
+                id: 'skiba-1',
+                title: 'Cyber Sneaker Graphic Tee',
+                category: 'cyber',
+                price: 250,
+                image: 'Skiba1.png',
+                description: 'Futuristic high-top futuristic sneaker artwork with illuminated cyan and neon orange accents printed on premium black cotton.',
+                badge: 'Cyber Tech'
+            },
+            {
+                id: 'skiba-2',
+                title: 'Neon Game Controller Graphic Tee',
+                category: 'gaming',
+                price: 250,
+                image: 'Skiba2.png',
+                description: 'Vibrant splatter-art wireless gamepad illustration with vivid blue, magenta and lime colorways for gamers.',
+                badge: 'Gamer Edition'
+            },
+            {
+                id: 'skiba-3',
+                title: 'Retro Cube Graphic Tee',
+                category: 'retro',
+                price: 250,
+                image: 'Skiba3.png',
+                description: 'Iconic 3D Rubik-style puzzle cube design featuring bold yellow glow and classic geometric aesthetics.',
+                badge: 'Retro Pop'
+            },
+            {
+                id: 'skiba-4',
+                title: 'Vibrant Headphones Graphic Tee',
+                category: 'audio',
+                price: 250,
+                image: 'Skiba4.png',
+                description: 'High-energy audio headphones visual with colorful graffiti paint burst strokes and sound wave aura.',
+                badge: 'Music Street'
+            },
+            {
+                id: 'skiba-5',
+                title: 'Rainbow Speaker Graphic Tee',
+                category: 'audio',
+                price: 250,
+                image: 'Skiba5.png',
+                description: 'Explosive rainbow paint splash featuring a sleek illuminated portable Bluetooth party speaker design.',
+                badge: 'Audio Boom'
+            },
+            {
+                id: 'skiba-6',
+                title: 'Typography Unity Graphic Tee',
+                category: 'cyber',
+                price: 250,
+                image: 'Skiba6.jpg',
+                description: 'Intricate urban graffiti art lettering displaying "UNITY" with ornate floral, wave and vine filigree.',
+                badge: 'Urban Art'
+            }
+        ];
+
+        // State Management
+        let cart = [];
+        let activeQuickViewId = null;
+        let selectedQuickViewSize = 'M';
+        let quickViewQty = 1;
+        let selectedSizes = {
+            'skiba-1': 'M',
+            'skiba-2': 'M',
+            'skiba-3': 'M',
+            'skiba-4': 'M',
+            'skiba-5': 'M',
+            'skiba-6': 'M'
+        };
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            renderProducts(products);
+            updateCartUI();
+            lucide.createIcons();
+        });
+
+        function renderProducts(items) {
+            const grid = document.getElementById('productsGrid');
+            const emptyState = document.getElementById('emptyState');
+            const countText = document.getElementById('productCountText');
+
+            if (items.length === 0) {
+                grid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                countText.textContent = '0 items found';
+                return;
+            }
+
+            grid.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+            countText.textContent = `Showing ${items.length} design${items.length > 1 ? 's' : ''}`;
+
+            grid.innerHTML = items.map(p => `
+                <div class="bg-dark-card border border-dark-border rounded-3xl overflow-hidden flex flex-col justify-between glow-hover transition-all duration-300 group">
+                    <div>
+                        <!-- Image Container with Hover Effect -->
+                        <div class="relative bg-black/40 p-6 flex items-center justify-center overflow-hidden border-b border-dark-border/50 group">
+                            <span class="absolute top-4 left-4 z-10 px-2.5 py-1 rounded-full text-[10px] font-bold bg-dark-bg/80 text-neon-cyan border border-neon-cyan/30 backdrop-blur-md">
+                                ${p.badge}
+                            </span>
+                            <span class="absolute top-4 right-4 z-10 px-3 py-1 rounded-full text-xs font-black bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/40 font-mono">
+                                R${p.price}
+                            </span>
+                            
+                            <img src="${p.image}" 
+                                 alt="${p.title}" 
+                                 class="h-64 object-contain transition-transform duration-500 group-hover:scale-105"
+                                 onerror="this.src='https://placehold.co/400x500/121218/00f3ff?text=${encodeURIComponent(p.title)}'"
+                            >
+                            
+                            <button onclick="openQuickView('${p.id}')" class="absolute bottom-4 bg-dark-bg/90 text-white text-xs font-semibold px-4 py-2 rounded-full border border-dark-border hover:border-neon-cyan transition-all opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 backdrop-blur-md flex items-center gap-1.5">
+                                <i data-lucide="eye" class="w-3.5 h-3.5 text-neon-cyan"></i> Quick View
+                            </button>
+                        </div>
+
+                        <!-- Info Section -->
+                        <div class="p-5">
+                            <h3 class="font-bold text-lg text-white group-hover:text-neon-cyan transition-colors line-clamp-1">${p.title}</h3>
+                            <p class="text-xs text-gray-400 mt-1 line-clamp-2">${p.description}</p>
+
+                            <!-- Size Selector -->
+                            <div class="mt-4">
+                                <div class="flex items-center justify-between text-[11px] text-gray-400 mb-1.5 font-semibold">
+                                    <span>SELECT SIZE:</span>
+                                </div>
+                                <div class="grid grid-cols-5 gap-1.5">
+                                    ${['S', 'M', 'L', 'XL', 'XXL'].map(size => `
+                                        <button 
+                                            onclick="selectSize('${p.id}', '${size}')" 
+                                            id="size-btn-${p.id}-${size}"
+                                            class="size-btn-${p.id} py-1 text-xs font-medium rounded-lg border transition-all ${selectedSizes[p.id] === size ? 'bg-neon-cyan/20 border-neon-cyan text-neon-cyan' : 'bg-dark-bg border-dark-border text-gray-400 hover:border-gray-500'}"
+                                        >
+                                            ${size}
+                                        </button>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="p-5 pt-0">
+                        <button onclick="addToCart('${p.id}')" class="w-full py-3 rounded-xl bg-neon-cyan/10 hover:bg-neon-cyan text-neon-cyan hover:text-black border border-neon-cyan/30 hover:border-neon-cyan font-bold text-xs uppercase tracking-wider transition-all duration-200 flex items-center justify-center gap-2">
+                            <i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart • R250
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        function selectSize(productId, size) {
+            selectedSizes[productId] = size;
+            document.querySelectorAll(`.size-btn-${productId}`).forEach(btn => {
+                btn.className = `size-btn-${productId} py-1 text-xs font-medium rounded-lg border transition-all bg-dark-bg border-dark-border text-gray-400 hover:border-gray-500`;
+            });
+            const selectedBtn = document.getElementById(`size-btn-${productId}-${size}`);
+            if (selectedBtn) {
+                selectedBtn.className = `size-btn-${productId} py-1 text-xs font-medium rounded-lg border transition-all bg-neon-cyan/20 border-neon-cyan text-neon-cyan`;
+            }
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = products.filter(p => 
+                p.title.toLowerCase().includes(query) || 
+                p.description.toLowerCase().includes(query)
+            );
+            renderProducts(filtered);
+        }
+
+        function handleMobileSearch() {
+            const query = document.getElementById('mobileSearchInput').value.toLowerCase();
+            const filtered = products.filter(p => 
+                p.title.toLowerCase().includes(query) || 
+                p.description.toLowerCase().includes(query)
+            );
+            renderProducts(filtered);
+        }
+
+        function handleFilter() {
+            const category = document.getElementById('categoryFilter').value;
+            if (category === 'all') {
+                renderProducts(products);
+            } else {
+                const filtered = products.filter(p => p.category === category);
+                renderProducts(filtered);
+            }
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('mobileSearchInput').value = '';
+            document.getElementById('categoryFilter').value = 'all';
+            renderProducts(products);
+        }
+
+        function openQuickView(productId) {
+            const p = products.find(prod => prod.id === productId);
+            if (!p) return;
+
+            activeQuickViewId = productId;
+            selectedQuickViewSize = selectedSizes[productId] || 'M';
+            quickViewQty = 1;
+
+            document.getElementById('qvTitle').textContent = p.title;
+            document.getElementById('qvPrice').textContent = `R${p.price}`;
+            document.getElementById('qvDescription').textContent = p.description;
+            document.getElementById('qvTag').textContent = p.badge;
+            document.getElementById('qvQty').textContent = quickViewQty;
+            
+            const qvImg = document.getElementById('qvImage');
+            qvImg.src = p.image;
+            qvImg.onerror = () => { qvImg.src = `https://placehold.co/400x500/121218/00f3ff?text=${encodeURIComponent(p.title)}`; };
+
+            // Render sizes in Quick View
+            const qvSizesContainer = document.getElementById('qvSizes');
+            qvSizesContainer.innerHTML = ['S', 'M', 'L', 'XL', 'XXL'].map(size => `
+                <button 
+                    onclick="selectQvSize('${size}')" 
+                    id="qv-size-${size}"
+                    class="qv-size-btn w-12 py-2 text-xs font-bold rounded-xl border transition-all ${selectedQuickViewSize === size ? 'bg-neon-cyan text-black border-neon-cyan' : 'bg-dark-bg border-dark-border text-gray-300'}"
+                >
+                    ${size}
+                </button>
+            `).join('');
+
+            document.getElementById('quickViewModal').classList.remove('hidden');
+        }
+
+        function closeQuickView() {
+            document.getElementById('quickViewModal').classList.add('hidden');
+        }
+
+        function selectQvSize(size) {
+            selectedQuickViewSize = size;
+            document.querySelectorAll('.qv-size-btn').forEach(btn => {
+                btn.className = 'qv-size-btn w-12 py-2 text-xs font-bold rounded-xl border transition-all bg-dark-bg border-dark-border text-gray-300';
+            });
+            const btn = document.getElementById(`qv-size-${size}`);
+            if (btn) btn.className = 'qv-size-btn w-12 py-2 text-xs font-bold rounded-xl border transition-all bg-neon-cyan text-black border-neon-cyan';
+        }
+
+        function adjustQvQty(delta) {
+            quickViewQty = Math.max(1, quickViewQty + delta);
+            document.getElementById('qvQty').textContent = quickViewQty;
+        }
+
+        function addFromQuickView() {
+            if (!activeQuickViewId) return;
+            addToCart(activeQuickViewId, selectedQuickViewSize, quickViewQty);
+            closeQuickView();
+        }
+
+        function addToCart(productId, customSize = null, customQty = 1) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const size = customSize || selectedSizes[productId] || 'M';
+            const existingIndex = cart.findIndex(item => item.id === productId && item.size === size);
+
+            if (existingIndex > -1) {
+                cart[existingIndex].quantity += customQty;
+            } else {
+                cart.push({
+                    id: product.id,
+                    title: product.title,
+                    price: product.price,
+                    image: product.image,
+                    size: size,
+                    quantity: customQty
+                });
+            }
+
+            updateCartUI();
+            showToast(`Added "${product.title}" (${size}) to cart`);
+        }
+
+        function updateCartQuantity(index, delta) {
+            if (cart[index]) {
+                cart[index].quantity += delta;
+                if (cart[index].quantity <= 0) {
+                    cart.splice(index, 1);
+                }
+                updateCartUI();
+            }
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = totalItems > 0 ? 60 : 0;
+            const total = subtotal + shipping;
+
+            // Badges
+            document.getElementById('cartCountBadge').textContent = totalItems;
+            document.getElementById('cartDrawerBadge').textContent = `${totalItems} item${totalItems !== 1 ? 's' : ''}`;
+
+            // Totals
+            document.getElementById('cartSubtotal').textContent = `R${subtotal}`;
+            document.getElementById('cartShipping').textContent = shipping > 0 ? `R${shipping}` : 'R0';
+            document.getElementById('cartTotal').textContent = `R${total}`;
+
+            // Disable checkout button if empty
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            checkoutBtn.disabled = cart.length === 0;
+
+            // Render Cart Items
+            const itemsList = document.getElementById('cartItemsList');
+            if (cart.length === 0) {
+                itemsList.innerHTML = `
+                    <div class="text-center py-16 text-gray-500">
+                        <i data-lucide="shopping-bag" class="w-12 h-12 mx-auto mb-3 stroke-[1.5]"></i>
+                        <p class="text-sm">Your cart is empty</p>
+                        <p class="text-xs text-gray-600 mt-1">Select a tee to get started</p>
+                    </div>
+                `;
+            } else {
+                itemsList.innerHTML = cart.map((item, idx) => `
+                    <div class="flex items-center gap-4 bg-dark-bg p-3.5 rounded-2xl border border-dark-border">
+                        <img src="${item.image}" alt="${item.title}" class="w-16 h-16 object-contain rounded-lg bg-black/40 p-1">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-xs font-bold text-white truncate">${item.title}</h4>
+                            <div class="text-[11px] text-gray-400 mt-0.5">Size: <span class="text-neon-cyan font-bold">${item.size}</span> • R${item.price}</div>
+                            
+                            <div class="flex items-center gap-3 mt-2">
+                                <div class="flex items-center border border-dark-border rounded-lg bg-dark-card">
+                                    <button onclick="updateCartQuantity(${idx}, -1)" class="w-6 h-6 text-xs text-gray-400 hover:text-white">-</button>
+                                    <span class="px-2 text-xs font-bold text-white">${item.quantity}</span>
+                                    <button onclick="updateCartQuantity(${idx}, 1)" class="w-6 h-6 text-xs text-gray-400 hover:text-white">+</button>
+                                </div>
+                                <button onclick="removeFromCart(${idx})" class="text-[10px] text-rose-400 hover:text-rose-300">Remove</button>
+                            </div>
+                        </div>
+                        <div class="text-right font-mono font-bold text-sm text-neon-cyan">
+                            R${item.price * item.quantity}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            lucide.createIcons();
+        }
+
+        function toggleCart(open) {
+            const drawer = document.getElementById('cartDrawer');
+            const content = document.getElementById('cartContent');
+            
+            if (open) {
+                drawer.classList.remove('pointer-events-none', 'opacity-0');
+                drawer.classList.add('opacity-100');
+                content.classList.remove('translate-x-full');
+            } else {
+                drawer.classList.add('opacity-0');
+                content.classList.add('translate-x-full');
+                setTimeout(() => {
+                    drawer.classList.add('pointer-events-none');
+                }, 300);
+            }
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'bg-dark-card border border-neon-cyan/50 text-white text-xs px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2 transform translate-y-4 opacity-0 transition-all duration-300 pointer-events-auto';
+            toast.innerHTML = `
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-neon-cyan"></i>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-4', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function simulateCheckout() {
+            if (cart.length === 0) return;
+
+            const total = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0) + 60;
+            
+            alert(`🎉 Thank you for your order!\n\nTotal Paid: R${total}\nItems: ${cart.length} design(s)\n\nWe will ship your custom printed SKIBA graphic tees shortly!`);
+            
+            cart = [];
+            updateCartUI();
+            toggleCart(false);
+        }
+    </script>
+</body>
+</html>
